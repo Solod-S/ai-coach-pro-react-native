@@ -6,8 +6,9 @@ import {
   View,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "./../../constant/Colors";
 import {
@@ -15,9 +16,50 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
+import { auth, db } from "./../../config/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
+import { Loading, BackButton } from "../../components";
+import { UserDetailContext } from "../../context/UserDetailContext";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const SignIn = () => {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+
+  const userLogin = async () => {
+    try {
+      if (email?.length <= 0 && password?.length <= 0) {
+        Alert.alert("Error", "Please fill all the fields");
+        return;
+      }
+      setIsLoading(true);
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      const { user } = response;
+      setUserDetail(user);
+    } catch (e) {
+      let msg = e.message || "An error occurred";
+      if (msg.includes("invalid-email")) msg = "Invalid email";
+      if (msg.includes("auth/invalid-credential"))
+        msg = "Invalid email or password";
+      Alert.alert(
+        "Error",
+        msg
+          .replace("FirebaseError: ", "")
+          .replace("Firebase: ", "")
+          .replace("auth/", "")
+          .replace(/-/g, " ")
+      );
+      console.log(`Error in userLogin:`, e.message);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 600);
+    }
+  };
+
   return (
     <SafeAreaView
       edges={["top"]}
@@ -30,10 +72,11 @@ const SignIn = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          marginTop: hp(5),
+          marginTop: hp(1),
           paddingHorizontal: 25,
         }}
       >
+        <BackButton />
         <Image
           style={{ width: 180, height: 180 }}
           source={require("./../../assets/images/logo.png")}
@@ -41,32 +84,55 @@ const SignIn = () => {
         <Text style={{ fontSize: hp(3.7), fontFamily: "outfit-bold" }}>
           Welcome Back
         </Text>
-        <TextInput style={styles.textInput} placeholder="Email" />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email"
+          placeholderTextColor={Colors.GRAY}
+          onChangeText={value => setEmail(value)}
+        />
         <TextInput
           style={styles.textInput}
           placeholder="Password"
+          placeholderTextColor={Colors.GRAY}
           secureTextEntry
+          onChangeText={value => setPassword(value)}
         />
-        <TouchableOpacity
-          style={{
-            padding: 15,
-            backgroundColor: Colors.PRIMARY,
-            width: "100%",
-            marginTop: 25,
-            borderRadius: 10,
-          }}
-        >
-          <Text
+
+        {isLoading ? (
+          <View
             style={{
-              fontFamily: "outfit",
-              fontSize: hp(2.4),
-              color: Colors.WHITE,
-              textAlign: "center",
+              padding: 15,
+              backgroundColor: Colors.PRIMARY,
+              width: "100%",
+              marginTop: 25,
+              borderRadius: 10,
             }}
           >
-            Sign In
-          </Text>
-        </TouchableOpacity>
+            <Loading color={Colors.WHITE} size={hp(3.3)} />
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => userLogin()}
+            style={{
+              padding: 15,
+              backgroundColor: Colors.PRIMARY,
+              width: "100%",
+              marginTop: 25,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "outfit",
+                fontSize: hp(2.4),
+                color: Colors.WHITE,
+                textAlign: "center",
+              }}
+            >
+              Sign In
+            </Text>
+          </TouchableOpacity>
+        )}
         <View
           style={{
             display: "flex",
@@ -97,5 +163,6 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 18,
     borderRadius: 8,
+    color: Colors.BLACK,
   },
 });

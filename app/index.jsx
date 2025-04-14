@@ -13,9 +13,33 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./../config/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import { useContext } from "react";
+import { UserDetailContext } from "@/context/UserDetailContext";
 
 export default function Index() {
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
+
+  onAuthStateChanged(auth, async user => {
+    try {
+      if (user) {
+        const docRef = doc(db, "users", user?.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUserDetail(data);
+          router.replace("(tabs)/home");
+        }
+      } else {
+      }
+    } catch (e) {
+      console.log("error in onAuthStateChanged: ", e);
+    }
+  });
+
   return (
     <SafeAreaView
       edges={["top"]}
