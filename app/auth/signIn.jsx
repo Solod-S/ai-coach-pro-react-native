@@ -16,8 +16,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
-import { auth, db } from "./../../config/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { auth } from "./../../config/firebaseConfig";
 import { Loading, BackButton } from "../../components";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
