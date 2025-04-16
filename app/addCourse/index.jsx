@@ -198,5 +198,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: "flex-start",
     fontSize: hp(1.8),
+    textAlignVertical: "top",
   },
 });
