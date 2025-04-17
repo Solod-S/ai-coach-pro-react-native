@@ -6,8 +6,11 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
+import Colors from "../../constant/Colors";
 
 export const Header = () => {
+  const router = useRouter();
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
 
   return (
@@ -20,14 +23,22 @@ export const Header = () => {
       }}
     >
       <View>
-        <Text style={{ fontWeight: "outfit-bold", fontSize: hp(3) }}>
+        <Text
+          style={{
+            color: Colors.WHITE,
+            fontWeight: "outfit-bold",
+            fontSize: hp(3),
+          }}
+        >
           Hello, {userDetail?.name}
         </Text>
-        <Text style={{ fontFamily: "outfit", fontSize: hp(2) }}>
+        <Text
+          style={{ color: Colors.WHITE, fontFamily: "outfit", fontSize: hp(2) }}
+        >
           Let's Get Started!
         </Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push("/profile")}>
         <Ionicons name="settings-outline" size={hp(3.5)} color="black" />
       </TouchableOpacity>
     </View>

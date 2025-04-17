@@ -9,9 +9,21 @@ import Colors from "../../constant/Colors";
 import * as Progress from "react-native-progress";
 
 export const CourseProgress = ({ courseList }) => {
+  const getCompletedChapters = course => {
+    const completedChapter = course?.completedChapter?.length;
+    const perc = completedChapter / course?.chapters?.length;
+    return perc;
+  };
+
   return (
     <View style={{ marginTop: 10 }}>
-      <Text style={{ fontFamily: "outfit-bold", fontSize: hp(3) }}>
+      <Text
+        style={{
+          color: Colors.WHITE,
+          fontFamily: "outfit-bold",
+          fontSize: hp(3),
+        }}
+      >
         Progress
       </Text>
       <FlatList
@@ -62,12 +74,16 @@ export const CourseProgress = ({ courseList }) => {
               </View>
             </View>
             <View style={{ marginTop: 10 }}>
-              <Progress.Bar progress={0.3} width={wp(60)} />
+              <Progress.Bar
+                progress={getCompletedChapters(item)}
+                width={wp(60)}
+              />
               <Text
                 style={{ marginTop: 2, fontFamily: "outfit" }}
                 numberOfLines={1}
               >
-                3 Out 5 Chapter Completed
+                {item?.completedChapter?.length ?? 0} Out{" "}
+                {item?.chapters?.length} Chapter Completed
               </Text>
             </View>
           </View>

@@ -74,13 +74,15 @@ const AddCourse = () => {
       const aiResponse = await GenerateTopicsAIModel.sendMessage(PROMPT);
       const rest = JSON.parse(aiResponse.response.text());
       const courses = rest?.courses;
-      console.log(`courses`, courses);
+
       for (const item of courses || []) {
-        await setDoc(doc(db, "courses", Date.now().toString()), {
+        const docId = Date.now().toString();
+        await setDoc(doc(db, "courses", docId), {
           ...item,
           createdAt: new Date(),
           createdBy: userDetail?.email,
           uid: userDetail?.uid,
+          docId,
         });
       }
       router.push("(tabs)/home");

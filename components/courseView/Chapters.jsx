@@ -1,4 +1,11 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import {
   widthPercentageToDP as wp,
@@ -6,8 +13,18 @@ import {
 } from "react-native-responsive-screen";
 import Entypo from "@expo/vector-icons/Entypo";
 import Colors from "../../constant/Colors";
+import { useRouter } from "expo-router";
 
 export const Chapters = ({ course }) => {
+  const router = useRouter();
+
+  const isChapterCompleted = chapterIndex => {
+    const isCompleted = course?.completedChapter?.find(
+      item => item == chapterIndex
+    );
+    return isCompleted ? true : false;
+  };
+
   return (
     <View style={{ padding: 20 }}>
       <Text style={{ fontFamily: "outfit-bold", fontSize: hp(2.8) }}>
@@ -16,7 +33,17 @@ export const Chapters = ({ course }) => {
       <FlatList
         data={course?.chapters}
         renderItem={({ item, index }) => (
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "chapterView",
+                params: {
+                  chapterIndex: index,
+                  chapterParams: JSON.stringify(item),
+                  docId: course?.docId,
+                },
+              })
+            }
             key={index}
             style={{
               padding: 18,
@@ -33,8 +60,16 @@ export const Chapters = ({ course }) => {
               <Text style={styles.chapterText}>{index + 1}.</Text>
               <Text style={styles.chapterText}>{item?.chapterName}</Text>
             </View>
-            <Entypo name="controller-play" size={24} color={Colors.PRIMARY} />
-          </View>
+            {isChapterCompleted(index) ? (
+              <Entypo name="check" size={hp(2.4)} color={Colors.PRIMARY} />
+            ) : (
+              <Entypo
+                name="controller-play"
+                size={hp(2.4)}
+                color={Colors.PRIMARY}
+              />
+            )}
+          </TouchableOpacity>
         )}
       />
     </View>
