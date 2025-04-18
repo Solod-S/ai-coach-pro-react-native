@@ -9,14 +9,18 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-export const BackButton = ({ style, iconSize = 4 }) => {
+export const BackButton = ({
+  style,
+  iconSize = 4,
+  iconColor = Colors.WHITE,
+}) => {
   const router = useRouter();
   return (
     <TouchableOpacity
       style={[styles.button, style]}
       onPress={() => router.back()}
     >
-      <Entypo name="chevron-left" size={hp(iconSize)} color={Colors.WHITE} />
+      <Entypo name="chevron-left" size={hp(iconSize)} color={iconColor} />
     </TouchableOpacity>
   );
 };

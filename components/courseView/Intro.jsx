@@ -20,6 +20,7 @@ export const Intro = ({ course }) => {
   return (
     <View>
       <BackButton
+        iconSize={3}
         style={{
           position: "absolute",
           zIndex: 12,

@@ -29,7 +29,6 @@ export default function Index() {
         const docRef = doc(db, "users", user?.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          console.log(1);
           const data = docSnap.data();
           setUserDetail(data);
           router.replace("(tabs)/home");
