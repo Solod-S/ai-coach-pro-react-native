@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../config/firebaseConfig";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { BackButton, Button } from "../../components";
 import {
   widthPercentageToDP as wp,
@@ -21,6 +21,7 @@ import Colors from "../../constant/Colors";
 import * as Progress from "react-native-progress";
 
 const Quiz = () => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [result, setResult] = useState([]);
@@ -50,13 +51,18 @@ const Quiz = () => {
   const onQuizFinish = async () => {
     try {
       setIsLoading(true);
+      const quizResult = {
+        ...result,
+        // courseId: course?.docId,
+        // courseName: course?.courseTitle,
+        // uid: auth?.currentUser?.uid,
+      };
       await updateDoc(doc(db, "courses", course?.docId), {
-        quizResult: {
-          ...result,
-          courseId: course?.docId,
-          courseName: course?.courseTitle,
-          uid: auth?.currentUser?.uid,
-        },
+        quizResult: quizResult,
+      });
+      router.replace({
+        pathname: "/quiz/summary",
+        params: { quizResultParams: JSON.stringify(quizResult) },
       });
     } catch (error) {
       console.log("Error onQuizFinish: ", error);
@@ -107,7 +113,7 @@ const Quiz = () => {
             color="#FFB800"
             height={hp(1.2)}
             progress={getProgress(currentPage)}
-            width={Dimensions.get("window").width * 0.85}
+            width={wp(85)}
           />
         </View>
         <View

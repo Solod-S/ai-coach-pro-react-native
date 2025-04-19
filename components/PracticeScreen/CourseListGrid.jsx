@@ -19,12 +19,10 @@ export const CourseListGrid = ({ courseList, option }) => {
   const router = useRouter();
 
   const handlePress = course => {
-    // console.log(`course`, course);
-    if (option?.name == "Quiz")
-      router.push({
-        pathname: "/quiz",
-        params: { courseParams: JSON.stringify(course) },
-      });
+    router.push({
+      pathname: option?.path,
+      params: { courseParams: JSON.stringify(course) },
+    });
   };
 
   return (
