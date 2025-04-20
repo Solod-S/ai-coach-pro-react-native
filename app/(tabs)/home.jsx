@@ -11,11 +11,12 @@ import Colors from "./../../constant/Colors";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import { db } from "../../config/firebaseConfig";
-import { FlatList, Image, View } from "react-native";
+import { FlatList, Image, Platform, View } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { useFocusEffect } from "expo-router";
 
 export default function Home() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
@@ -43,19 +44,29 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    getCourseList();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      userDetail && getCourseList();
+    }, [userDetail])
+  );
+
   return (
     <View
-      // edges={["top"]}
-      style={
-        {
-          // flex: 1,
-          // backgroundColor: Colors.WHITE
-        }
-      }
+      style={{
+        flex: 1,
+        backgroundColor: Colors.WHITE,
+        paddingTop: Platform.OS == "ios" ? hp(3) : hp(1),
+      }}
     >
+      <Image
+        style={{
+          position: "absolute",
+          width: "100%",
+          // height: 700,
+          // objectFit: "cover",
+        }}
+        source={require("./../../assets/images/wave.png")}
+      />
       <FlatList
         onRefresh={() => getCourseList()}
         refreshing={isLoading}
@@ -63,21 +74,12 @@ export default function Home() {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View
-            style={{
-              flex: 1,
-              backgroundColor: Colors.WHITE,
-              paddingTop: 50,
-            }}
+          // style={{
+          //   flex: 1,
+          //   backgroundColor: Colors.WHITE,
+          //   paddingTop: Platform.OS == "ios" ? hp(3) : hp(1),
+          // }}
           >
-            <Image
-              style={{
-                position: "absolute",
-                width: "100%",
-                // height: 700,
-                // objectFit: "cover",
-              }}
-              source={require("./../../assets/images/wave.png")}
-            />
             <View style={{ padding: 15 }}>
               <Header />
               {courseList.length == 0 ? (

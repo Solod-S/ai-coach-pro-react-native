@@ -13,12 +13,13 @@ export const BackButton = ({
   style,
   iconSize = 4,
   iconColor = Colors.WHITE,
+  onPress = null,
 }) => {
   const router = useRouter();
   return (
     <TouchableOpacity
       style={[styles.button, style]}
-      onPress={() => router.back()}
+      onPress={onPress ? () => onPress() : () => router.back()}
     >
       <Entypo name="chevron-left" size={hp(iconSize)} color={iconColor} />
     </TouchableOpacity>

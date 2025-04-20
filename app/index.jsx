@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -34,12 +35,32 @@ export default function Index() {
           router.replace("(tabs)/home");
         }
       } else {
+        // User is signed out
+        setUserDetail(null);
       }
     } catch (e) {
       console.log("error in onAuthStateChanged: ", e);
     }
   });
 
+  // if (!userDetail)
+  //   return (
+  //     <SafeAreaView
+  //       edges={["top"]}
+  //       style={{
+  //         flex: 1,
+  //         backgroundColor: Colors.WHITE,
+  //         // marginHorizontal: 16,
+  //         // marginTop: 10,
+  //       }}
+  //     >
+  //       <ActivityIndicator
+  //         style={{ marginTop: hp(45) }}
+  //         size={"large"}
+  //         color={Colors.PRIMARY}
+  //       />
+  //     </SafeAreaView>
+  //   );
   return (
     <SafeAreaView
       edges={["top"]}

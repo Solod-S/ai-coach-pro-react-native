@@ -39,7 +39,7 @@ export const Header = () => {
         </Text>
       </View>
       <TouchableOpacity onPress={() => router.push("/profile")}>
-        <Ionicons name="settings-outline" size={hp(3.5)} color="black" />
+        <Ionicons name="settings-outline" size={hp(3.5)} color={Colors.WHITE} />
       </TouchableOpacity>
     </View>
   );

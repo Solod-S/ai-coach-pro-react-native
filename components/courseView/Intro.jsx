@@ -15,12 +15,15 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "../../constant/Colors";
 import { BackButton, Button } from "../ui";
+import { useRouter } from "expo-router";
 
 export const Intro = ({ course }) => {
+  const router = useRouter();
   return (
     <View>
       <BackButton
         iconSize={3}
+        // onPress={() => router.replace("/home")}
         style={{
           position: "absolute",
           zIndex: 12,

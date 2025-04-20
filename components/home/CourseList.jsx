@@ -16,12 +16,12 @@ import { imageAssets } from "../../constant/Option";
 import Colors from "../../constant/Colors";
 import { useRouter } from "expo-router";
 
-export const CourseList = ({ courseList }) => {
+export const CourseList = ({ courseList, heading = "Courses" }) => {
   const router = useRouter();
   return (
     <View style={{ marginTop: 15 }}>
       <Text style={{ fontFamily: "outfit-bold", fontSize: hp(3) }}>
-        Courses
+        {heading}
       </Text>
       <FlatList
         showsHorizontalScrollIndicator={false}

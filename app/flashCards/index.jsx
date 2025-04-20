@@ -2,7 +2,6 @@ import {
   View,
   Text,
   Image,
-  Pressable,
   FlatList,
   Dimensions,
   StyleSheet,
@@ -35,7 +34,7 @@ export default function Flashcards() {
     const newIndex = Math.floor(contentOffsetX / (width - 70)); // Учитываем отступы на карточках
     // Проверяем, если индекс изменился, то обновляем состояние
     if (newIndex !== currentPage) {
-      console.log("Scrolled to index:", newIndex);
+      // console.log("Scrolled to index:", newIndex);
       setCurrentPage(newIndex);
     }
   };

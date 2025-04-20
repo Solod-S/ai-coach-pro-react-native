@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../config/firebaseConfig";
+import { db } from "../../config/firebaseConfig";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { BackButton, Button } from "../../components";
 import {
