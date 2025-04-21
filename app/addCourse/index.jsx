@@ -15,10 +15,17 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Button, CustomKeyboardView } from "../../components/";
+import { BackButton, Button, CustomKeyboardView } from "../../components/";
 import { GenerateTopicsAIModel } from "../../config/aiModel";
 import Prompt from "../../constant/Prompt";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import { useRouter } from "expo-router";
@@ -33,6 +40,21 @@ const AddCourse = () => {
 
   const onGenerateTopic = async () => {
     try {
+      const q = query(
+        collection(db, "courses"),
+        where("uid", "==", userDetail?.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const courses = [];
+      querySnapshot.forEach(doc => {
+        courses.push(doc.data());
+      });
+
+      if (userDetail?.member == false && courses?.length >= 5) {
+        Alert.alert("Limit Reached", "You can add up to 5 courses only.");
+        return;
+      }
       if (!userInput) {
         Alert.alert("Error", "Please enter a course topic.");
         return;
@@ -105,6 +127,7 @@ const AddCourse = () => {
       }}
     >
       <ScrollView style={{ padding: 20 }}>
+        <BackButton />
         <CustomKeyboardView>
           <Text style={{ fontSize: hp(3.3), fontFamily: "outfit-bold" }}>
             Start a New Course

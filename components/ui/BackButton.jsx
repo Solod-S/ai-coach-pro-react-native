@@ -11,7 +11,7 @@ import {
 
 export const BackButton = ({
   style,
-  iconSize = 4,
+  iconSize = 3,
   iconColor = Colors.WHITE,
   onPress = null,
 }) => {

@@ -22,13 +22,10 @@ export default function Home() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [courseList, setCourseList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const getCourseList = async () => {
+  const getCourseList = async uid => {
     try {
       setIsLoading(true);
-      const q = query(
-        collection(db, "courses"),
-        where("uid", "==", userDetail?.uid)
-      );
+      const q = query(collection(db, "courses"), where("uid", "==", uid));
 
       const querySnapshot = await getDocs(q);
       const data = [];
@@ -46,7 +43,7 @@ export default function Home() {
 
   useFocusEffect(
     React.useCallback(() => {
-      userDetail && getCourseList();
+      userDetail && getCourseList(userDetail?.uid);
     }, [userDetail])
   );
 

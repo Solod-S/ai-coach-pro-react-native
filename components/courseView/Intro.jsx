@@ -1,12 +1,5 @@
-import {
-  Image,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import React from "react";
+import { Alert, Image, Platform, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useState } from "react";
 import { imageAssets } from "../../constant/Option";
 import {
   widthPercentageToDP as wp,
@@ -15,10 +8,66 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "../../constant/Colors";
 import { BackButton, Button } from "../ui";
+import { UserDetailContext } from "../../context/UserDetailContext";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../config/firebaseConfig";
 import { useRouter } from "expo-router";
 
-export const Intro = ({ course }) => {
+export const Intro = ({ course, enroll }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+
+  const onEnrollCourse = async () => {
+    try {
+      setIsLoading(true);
+
+      const q = query(
+        collection(db, "courses"),
+        where("uid", "==", userDetail?.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const courses = [];
+      querySnapshot.forEach(doc => {
+        courses.push(doc.data());
+      });
+
+      if (userDetail?.member == false && courses?.length >= 5) {
+        Alert.alert("Limit Reached", "You can add up to 5 courses only.");
+        return;
+      }
+
+      const docId = Date.now().toString();
+      const data = {
+        ...course,
+        createdAt: new Date(),
+        createdBy: userDetail?.email,
+        uid: userDetail?.uid,
+        docId,
+        enrolled: true,
+      };
+      data.completedChapter = [];
+
+      await setDoc(doc(db, "courses", docId), data);
+
+      router.replace({
+        pathname: "/courseView/" + docId,
+        params: { enroll: false, courseParams: JSON.stringify(data) },
+      });
+    } catch (error) {
+      console.log(`Error in onEnrollCourse:`, error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <View>
       <BackButton
@@ -78,7 +127,15 @@ export const Intro = ({ course }) => {
         >
           {course?.description}
         </Text>
-        <Button text="Start Now" onPress={() => console.log(`!`)} />
+        {enroll == "true" ? (
+          <Button
+            loading={isLoading}
+            onPress={() => onEnrollCourse()}
+            text="Enroll Now"
+          />
+        ) : (
+          <Button text="Start Now" onPress={() => console.log(`!`)} />
+        )}
       </View>
     </View>
   );

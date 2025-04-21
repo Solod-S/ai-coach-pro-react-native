@@ -16,7 +16,11 @@ import { imageAssets } from "../../constant/Option";
 import Colors from "../../constant/Colors";
 import { useRouter } from "expo-router";
 
-export const CourseList = ({ courseList, heading = "Courses" }) => {
+export const CourseList = ({
+  courseList,
+  enroll = false,
+  heading = "Courses",
+}) => {
   const router = useRouter();
   return (
     <View style={{ marginTop: 15 }}>
@@ -32,7 +36,7 @@ export const CourseList = ({ courseList, heading = "Courses" }) => {
             onPress={() =>
               router.push({
                 pathname: "/courseView/" + item?.docId,
-                params: { courseParams: JSON.stringify(item) },
+                params: { enroll, courseParams: JSON.stringify(item) },
               })
             }
             style={styles.courseContainer}

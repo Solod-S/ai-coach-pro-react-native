@@ -67,7 +67,7 @@ export const ListByCategory = ({ category, uid }) => {
   return (
     <View>
       {courseList?.length > 0 && (
-        <CourseList courseList={courseList} heading={category} />
+        <CourseList enroll={true} courseList={courseList} heading={category} />
       )}
     </View>
   );

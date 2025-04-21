@@ -3,8 +3,10 @@ import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { UsePreventBack } from "../../hooks";
 
 export default function TabLayout() {
+  UsePreventBack();
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
