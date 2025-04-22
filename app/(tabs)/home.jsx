@@ -22,10 +22,13 @@ export default function Home() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [courseList, setCourseList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const getCourseList = async uid => {
+  const getCourseList = async () => {
     try {
       setIsLoading(true);
-      const q = query(collection(db, "courses"), where("uid", "==", uid));
+      const q = query(
+        collection(db, "courses"),
+        where("uid", "==", userDetail?.uid)
+      );
 
       const querySnapshot = await getDocs(q);
       const data = [];
@@ -33,7 +36,14 @@ export default function Home() {
         data.push(doc.data());
       });
 
-      if (data.length > 0) setCourseList(data);
+      const result = data.map(item => {
+        if (item?.enrolled) {
+          return { ...item, isEnrolled: true };
+        } else {
+          return { ...item, isEnrolled: false };
+        }
+      });
+      if (result.length > 0) setCourseList(result);
     } catch (error) {
       console.log("error in getCourseList: ", error);
     } finally {
@@ -43,7 +53,7 @@ export default function Home() {
 
   useFocusEffect(
     React.useCallback(() => {
-      userDetail && getCourseList(userDetail?.uid);
+      userDetail && getCourseList();
     }, [userDetail])
   );
 

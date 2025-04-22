@@ -24,11 +24,14 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import { useRouter } from "expo-router";
+import { isSameDay } from "../../utils/isSameDay";
 
 const AddCourse = () => {
   const { userDetail } = useContext(UserDetailContext);
@@ -40,6 +43,12 @@ const AddCourse = () => {
 
   const onGenerateTopic = async () => {
     try {
+      if (!userInput) {
+        Alert.alert("Error", "Please enter a course topic.");
+        return;
+      }
+      setIsLoading(true);
+      setSelectedTopic([]);
       const q = query(
         collection(db, "courses"),
         where("uid", "==", userDetail?.uid)
@@ -55,11 +64,17 @@ const AddCourse = () => {
         Alert.alert("Limit Reached", "You can add up to 5 courses only.");
         return;
       }
-      if (!userInput) {
-        Alert.alert("Error", "Please enter a course topic.");
+
+      const lastGeneratedAtIsSameDay = await isSameDay(userDetail?.uid);
+
+      if (lastGeneratedAtIsSameDay) {
+        Alert.alert(
+          "Limit Reached",
+          "You can generate only one article per day. Please try again tomorrow."
+        );
+
         return;
       }
-      setIsLoading(true);
 
       const PROMPT = userInput + Prompt.IDEA;
       // console.log(`PROMPT`, PROMPT);
@@ -104,9 +119,15 @@ const AddCourse = () => {
           createdAt: new Date(),
           createdBy: userDetail?.email,
           uid: userDetail?.uid,
+          enrolled: false,
+          completedChapter: [],
           docId,
         });
       }
+      const userRef = doc(db, "users", userDetail?.uid);
+      await updateDoc(userRef, {
+        lastGeneratedAt: Timestamp.now(),
+      });
       router.push("(tabs)/home");
     } catch (error) {
       console.log("error in onGenerateCourse: ", error);
@@ -127,7 +148,7 @@ const AddCourse = () => {
       }}
     >
       <ScrollView style={{ padding: 20 }}>
-        <BackButton />
+        <BackButton loading={isLoading} />
         <CustomKeyboardView>
           <Text style={{ fontSize: hp(3.3), fontFamily: "outfit-bold" }}>
             Start a New Course

@@ -1,4 +1,12 @@
-import { Alert, Image, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  Vibration,
+  View,
+} from "react-native";
 import React, { useContext, useState } from "react";
 import { imageAssets } from "../../constant/Option";
 import {
@@ -11,6 +19,7 @@ import { BackButton, Button } from "../ui";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -23,8 +32,7 @@ import { useRouter } from "expo-router";
 export const Intro = ({ course, enroll }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { userDetail, setUserDetail } = useContext(UserDetailContext);
-
+  const { userDetail } = useContext(UserDetailContext);
   const onEnrollCourse = async () => {
     try {
       setIsLoading(true);
@@ -68,6 +76,34 @@ export const Intro = ({ course, enroll }) => {
       setIsLoading(false);
     }
   };
+
+  const handleDelete = () => {
+    Vibration.vibrate(200); // Vibrate for 100ms before showing the Alert
+    Alert.alert("Delete?", "Are you sure you want to delete this course?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Dele",
+        onPress: () => onDeleteCourse(),
+      },
+    ]);
+  };
+
+  const onDeleteCourse = async () => {
+    try {
+      setIsLoading(true);
+
+      const docRef = doc(db, "courses", course?.docId);
+      await deleteDoc(docRef);
+      console.log(`Course with ID ${course?.docId} successfully deleted`);
+
+      router.replace("/home");
+    } catch (error) {
+      console.log(`Error in onEnrollCourse:`, error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View>
       <BackButton
@@ -127,14 +163,20 @@ export const Intro = ({ course, enroll }) => {
         >
           {course?.description}
         </Text>
-        {enroll == "true" ? (
+        {enroll == "true" && !course?.isEnrolled && (
           <Button
             loading={isLoading}
             onPress={() => onEnrollCourse()}
             text="Enroll Now"
           />
-        ) : (
-          <Button text="Start Now" onPress={() => console.log(`!`)} />
+        )}
+        {course?.uid === userDetail?.uid && (
+          <Button
+            loading={isLoading}
+            onPress={() => handleDelete()}
+            text="Delete"
+            style={{ backgroundColor: "red", borderColor: "red" }}
+          />
         )}
       </View>
     </View>

@@ -28,7 +28,11 @@ export const NoCourse = () => {
         text={"+ Create New Course"}
         onPress={() => router.push("addCourse")}
       />
-      <Button text={" Explore Existing Courses"} type="outlined" />
+      <Button
+        onPress={() => router.push("explore")}
+        text={"Explore Existing Courses"}
+        type="outlined"
+      />
     </View>
   );
 };

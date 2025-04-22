@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Vibration,
+  Alert,
 } from "react-native";
 import {
   MaterialIcons,
@@ -27,6 +29,16 @@ const Profile = () => {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
 
   const router = useRouter();
+  const handleLogout = () => {
+    Vibration.vibrate(200); // Vibrate for 100ms before showing the Alert
+    Alert.alert("Logout?", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        onPress: () => logOut(),
+      },
+    ]);
+  };
   const logOut = async () => {
     try {
       await signOut(auth);
@@ -81,7 +93,7 @@ const Profile = () => {
             route="explore"
           />
 
-          <TouchableOpacity style={styles.item} onPress={() => logOut()}>
+          <TouchableOpacity style={styles.item} onPress={() => handleLogout()}>
             <MaterialIcons name="logout" size={20} color="#000" />
             <Text style={styles.itemText}>Logout</Text>
           </TouchableOpacity>

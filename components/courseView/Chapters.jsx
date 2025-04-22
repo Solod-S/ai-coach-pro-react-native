@@ -58,7 +58,11 @@ export const Chapters = ({ course }) => {
           >
             <View style={{ gap: 10, display: "flex", flexDirection: "row" }}>
               <Text style={styles.chapterText}>{index + 1}.</Text>
-              <Text style={styles.chapterText}>{item?.chapterName}</Text>
+              <Text style={styles.chapterText}>
+                {item?.chapterName?.length >= 35
+                  ? item?.chapterName?.slice(0, 32) + "..."
+                  : item?.chapterName}
+              </Text>
             </View>
             {isChapterCompleted(index) ? (
               <Entypo name="check" size={hp(2.4)} color={Colors.PRIMARY} />

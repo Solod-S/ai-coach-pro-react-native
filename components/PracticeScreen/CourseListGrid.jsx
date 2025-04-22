@@ -29,31 +29,38 @@ export const CourseListGrid = ({ courseList, option }) => {
     <View>
       <FlatList
         numColumns={2}
-        style={{ padding: 20 }}
+        style={{ padding: 20, minHeight: hp(50) }}
         data={courseList}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => handlePress(item)}
             key={index}
             style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
+              //   flex: 1,
+              //   display: "flex",
+              width: wp(50) - 40,
               alignItems: "center",
               justifyContent: "center",
               padding: 15,
               backgroundColor: Colors.WHITE,
               margin: 10,
               borderRadius: 15,
-              elevation: 5,
+              // iOS shadow
+              shadowColor: Colors.GRAY,
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+
+              // Android shadow
+              elevation: 4,
             }}
           >
-            <AntDesign
+            {/* <AntDesign
               style={{ position: "absolute", top: 10, right: 10 }}
               name="checkcircle"
               size={hp(2.6)}
               color={Colors.GRAY}
-            />
+            /> */}
             <Image
               source={option?.icon}
               style={{ width: "100%", height: hp(9), objectFit: "contain" }}

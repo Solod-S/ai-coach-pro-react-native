@@ -21,20 +21,27 @@ import { useContext } from "react";
 import { UserDetailContext } from "@/context/UserDetailContext";
 
 export default function Index() {
-  // const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
 
-  // onAuthStateChanged(auth, async user => {
-  //   if (user) {
-  //     const docRef = doc(db, "users", user?.uid);
-  //     const docSnap = await getDoc(docRef);
-  //     if (docSnap.exists()) {
-  //       const data = docSnap.data();
-  //       setUserDetail(data);
-  //       router.replace("(tabs)/home");
-  //     }
-  //   }
-  // });
+  if (userDetail === undefined)
+    return (
+      <SafeAreaView
+        edges={["top"]}
+        style={{
+          flex: 1,
+          backgroundColor: Colors.WHITE,
+          // marginHorizontal: 16,
+          // marginTop: 10,
+        }}
+      >
+        <ActivityIndicator
+          style={{ marginTop: hp(45) }}
+          size={"large"}
+          color={Colors.PRIMARY}
+        />
+      </SafeAreaView>
+    );
 
   return (
     <SafeAreaView

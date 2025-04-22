@@ -42,6 +42,23 @@ export const CourseList = ({
             style={styles.courseContainer}
             key={index}
           >
+            <Text
+              style={{
+                position: "absolute",
+                zIndex: item?.isEnrolled ? 1 : -2,
+                left: hp(2),
+                top: hp(2),
+                fontFamily: "outfit-bold",
+                color: Colors.PRIMARY,
+                backgroundColor: item?.isEnrolled
+                  ? Colors.WHITE
+                  : "transparent",
+                padding: 5,
+                borderRadius: 8,
+              }}
+            >
+              {item?.isEnrolled ? "Enrolled" : ""}
+            </Text>
             <Image
               style={{
                 width: "100%",

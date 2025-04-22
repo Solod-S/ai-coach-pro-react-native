@@ -83,6 +83,7 @@ export default function Progress() {
         </Text>
         <FlatList
           onRefresh={() => getCourseList()}
+          ListEmptyComponent={<NoCourse />}
           refreshing={isLoading}
           showsVerticalScrollIndicator={false}
           data={courseList}

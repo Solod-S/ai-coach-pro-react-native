@@ -37,8 +37,9 @@ export const ListByCategory = ({ category, uid }) => {
       const q = query(
         collection(db, "courses"),
         where("category", "==", category),
+        where("enrolled", "==", false),
         orderBy("createdAt", "desc"),
-        limit(10)
+        limit(20)
       );
 
       const querySnapshot = await getDocs(q);
@@ -50,7 +51,32 @@ export const ListByCategory = ({ category, uid }) => {
         }
       });
 
-      if (data.length > 0) setCourseList(data);
+      const coursesQ = query(
+        collection(db, "courses"),
+        where("uid", "==", uid)
+      );
+
+      const coursesQuerySnapshot = await getDocs(coursesQ);
+      const courses = [];
+      coursesQuerySnapshot.forEach(doc => {
+        courses.push(doc.data());
+      });
+
+      const result = data.map(item => {
+        const isEnrolled = courses.find(
+          course =>
+            item.description === course.description &&
+            item.courseTitle === course.courseTitle
+        );
+
+        if (isEnrolled) {
+          return { ...item, isEnrolled: true };
+        } else {
+          return { ...item, isEnrolled: false };
+        }
+      });
+
+      if (result?.length > 0) setCourseList(result);
     } catch (error) {
       console.log("error in getCourseListByCategory: ", error);
     } finally {

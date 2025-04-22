@@ -8,7 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 export default function RootLayout() {
   const router = useRouter();
-  const [userDetail, setUserDetail] = useState();
+  const [userDetail, setUserDetail] = useState(undefined);
 
   useFonts({
     outfit: require("./../assets/fonts/Outfit-Regular.ttf"),
@@ -24,6 +24,8 @@ export default function RootLayout() {
           setUserDetail(docSnap.data());
           router.replace("(tabs)/home");
         }
+      } else {
+        setUserDetail(null);
       }
     });
 
