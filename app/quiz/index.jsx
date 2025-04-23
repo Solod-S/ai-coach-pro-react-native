@@ -19,6 +19,7 @@ import {
 } from "react-native-responsive-screen";
 import Colors from "../../constant/Colors";
 import * as Progress from "react-native-progress";
+import Toast from "react-native-toast-message";
 
 const Quiz = () => {
   const router = useRouter();
@@ -29,7 +30,6 @@ const Quiz = () => {
   const { courseParams } = useLocalSearchParams();
   const course = JSON.parse(courseParams);
   const quiz = course?.quiz;
-  // console.log(course);
 
   const getProgress = currentPage => {
     const perc = currentPage / quiz?.length;
@@ -59,6 +59,17 @@ const Quiz = () => {
       };
       await updateDoc(doc(db, "courses", course?.docId), {
         quizResult: quizResult,
+        completedQuiz: true,
+      });
+
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The quiz was completed.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
       });
       router.replace({
         pathname: "/quiz/summary",
@@ -66,6 +77,15 @@ const Quiz = () => {
       });
     } catch (error) {
       console.log("Error onQuizFinish: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setIsLoading(false);
     }

@@ -14,7 +14,10 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Colors from "../../constant/Colors";
-import { BackButton } from "../../components";
+import { BackButton, Button } from "../../components";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../config/firebaseConfig";
+import Toast from "react-native-toast-message";
 
 const QuestionAnswer = () => {
   const router = useRouter();
@@ -22,12 +25,47 @@ const QuestionAnswer = () => {
   const course = JSON.parse(courseParams);
   const qaList = course?.qa;
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [isLoading, setIsLoading] = useState();
 
   const onQuestionSelect = selectedChoice => {
     if (selectedQuestion === selectedChoice) {
       setSelectedQuestion(null);
     } else {
       setSelectedQuestion(selectedChoice);
+    }
+  };
+
+  const onQAComplete = async () => {
+    try {
+      setIsLoading(true);
+      await updateDoc(doc(db, "courses", course?.docId), {
+        completedQA: true,
+      });
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The QA was completed.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
+      // router.back();
+
+      router.replace("/home");
+    } catch (error) {
+      console.log("error in onQAComplete: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,6 +115,11 @@ const QuestionAnswer = () => {
               )}
             </TouchableOpacity>
           )}
+        />
+        <Button
+          loading={isLoading}
+          onPress={() => onQAComplete()}
+          text={"Finish"}
         />
       </View>
     </View>

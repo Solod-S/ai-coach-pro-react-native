@@ -28,6 +28,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 export const Intro = ({ course, enroll }) => {
   const router = useRouter();
@@ -61,17 +62,37 @@ export const Intro = ({ course, enroll }) => {
         uid: userDetail?.uid,
         docId,
         enrolled: true,
+        completedChapter: [],
+        completedQuiz: false,
+        completedFlashCard: false,
+        completedQA: false,
       };
-      data.completedChapter = [];
 
       await setDoc(doc(db, "courses", docId), data);
-
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The course was successfully added to your library.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
       router.replace({
         pathname: "/courseView/" + docId,
         params: { enroll: false, courseParams: JSON.stringify(data) },
       });
     } catch (error) {
       console.log(`Error in onEnrollCourse:`, error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -95,10 +116,27 @@ export const Intro = ({ course, enroll }) => {
       const docRef = doc(db, "courses", course?.docId);
       await deleteDoc(docRef);
       console.log(`Course with ID ${course?.docId} successfully deleted`);
-
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The course was successfully deleted.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
       router.replace("/home");
     } catch (error) {
       console.log(`Error in onEnrollCourse:`, error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setIsLoading(false);
     }

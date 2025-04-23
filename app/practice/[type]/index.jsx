@@ -60,7 +60,13 @@ const PracticeTypeHomeScreen = () => {
   }
 
   return (
-    <View>
+    <View
+      edges={["top"]}
+      style={{
+        flex: 1,
+        backgroundColor: Colors.WHITE,
+      }}
+    >
       <BackButton
         iconSize={3}
         style={{

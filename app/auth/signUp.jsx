@@ -21,13 +21,15 @@ import { auth, db } from "./../../config/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { Loading, BackButton, CustomKeyboardView } from "../../components";
 import { UserDetailContext } from "../../context/UserDetailContext";
+import { Ionicons } from "@expo/vector-icons";
 
 const SignIn = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const { setUserDetail } = useContext(UserDetailContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const createAccount = async () => {
     try {
@@ -119,13 +121,37 @@ const SignIn = () => {
             placeholderTextColor={Colors.GRAY}
             onChangeText={value => setEmail(value)}
           />
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             placeholder="Password"
             placeholderTextColor={Colors.GRAY}
             secureTextEntry
             onChangeText={value => setPassword(value)}
-          />
+          /> */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <TextInput
+              style={{ ...styles.textInput, paddingRight: 40 }}
+              placeholder="Password"
+              placeholderTextColor={Colors.GRAY}
+              secureTextEntry={!showPassword}
+              onChangeText={value => setPassword(value)}
+            />
+            <TouchableOpacity
+              style={{ position: "absolute", right: 10, top: "45%" }}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <Ionicons
+                name={showPassword ? "eye" : "eye-off"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
           {isLoading ? (
             <View
               style={{

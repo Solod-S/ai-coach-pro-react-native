@@ -32,6 +32,7 @@ import { db } from "../../config/firebaseConfig";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import { useRouter } from "expo-router";
 import { isSameDay } from "../../utils/isSameDay";
+import Toast from "react-native-toast-message";
 
 const AddCourse = () => {
   const { userDetail } = useContext(UserDetailContext);
@@ -82,9 +83,29 @@ const AddCourse = () => {
       const topicIdea = JSON.parse(aiResponse.response.text());
       // console.log(`topicIdea`, topicIdea.course_titles);
 
-      if (topicIdea?.course_titles) setTopics(topicIdea?.course_titles);
+      if (topicIdea?.course_titles) {
+        Toast.show({
+          type: "success",
+          position: "top",
+          text2: "The topics were successfully generated.",
+          //  text2: "",
+          visibilityTime: 2000,
+          autoHide: true,
+          topOffset: 50,
+        });
+        setTopics(topicIdea?.course_titles);
+      }
     } catch (error) {
       console.log("error in onGenerateTopic: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -121,6 +142,9 @@ const AddCourse = () => {
           uid: userDetail?.uid,
           enrolled: false,
           completedChapter: [],
+          completedQuiz: false,
+          completedFlashCard: false,
+          completedQA: false,
           docId,
         });
       }
@@ -128,9 +152,29 @@ const AddCourse = () => {
       await updateDoc(userRef, {
         lastGeneratedAt: Timestamp.now(),
       });
+      setTimeout(() => {
+        Toast.show({
+          type: "success",
+          position: "top",
+          text2: "The corse was successfully generated.",
+          //  text2: "",
+          visibilityTime: 2000,
+          autoHide: true,
+          topOffset: 50,
+        });
+      }, 500);
       router.push("(tabs)/home");
     } catch (error) {
       console.log("error in onGenerateCourse: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setTimeout(() => {
         setIsLoading(false);

@@ -18,15 +18,18 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { BackButton, Button } from "../../components";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../config/firebaseConfig";
+import Toast from "react-native-toast-message";
 
 export default function Flashcards() {
   const router = useRouter();
-  const { courseParams } = useLocalSearchParams();
+  const { courseParams, docId, index } = useLocalSearchParams();
   const course = JSON.parse(courseParams);
   const flashcards = course?.flashcards;
   const [currentPage, setCurrentPage] = useState(0);
   const width = Dimensions.get("screen").width;
-
+  const [isLoading, setIsLoading] = useState(false);
   const onScroll = event => {
     // Получаем смещение по X
     const contentOffsetX = event?.nativeEvent?.contentOffset.x;
@@ -42,6 +45,40 @@ export default function Flashcards() {
   const GetProgress = currentPage => {
     const percentage = (currentPage + 1) / flashcards?.length;
     return percentage;
+  };
+
+  const onFlashCardComplete = async () => {
+    try {
+      setIsLoading(true);
+      await updateDoc(doc(db, "courses", docId), {
+        completedFlashCard: true,
+      });
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The flash cards was completed.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
+      // router.back();
+
+      router.replace("/home");
+    } catch (error) {
+      console.log("error in onFlashCardComplete: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -146,7 +183,11 @@ export default function Flashcards() {
           )}
         />
         {currentPage === flashcards?.length - 1 && (
-          <Button onPress={() => router.back()} text={"Finish"} />
+          <Button
+            loading={isLoading}
+            onPress={() => onFlashCardComplete()}
+            text={"Finish"}
+          />
         )}
       </View>
     </View>

@@ -5,6 +5,8 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./../config/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "@/constant/ToastConfig";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -39,6 +41,7 @@ export default function RootLayout() {
           headerShown: false,
         }}
       ></Stack>
+      <Toast config={toastConfig} />
     </UserDetailContext.Provider>
   );
 }

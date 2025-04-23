@@ -119,6 +119,21 @@ export default function Index() {
               Already have an Account?
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                backgroundColor: Colors.PRIMARY,
+                borderWidth: 1,
+                borderColor: Colors.WHITE,
+              },
+            ]}
+            onPress={() => router.push("/auth/restorePassword")}
+          >
+            <Text style={[styles.buttonText, { color: Colors.WHITE }]}>
+              Restore Password
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

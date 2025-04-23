@@ -11,6 +11,7 @@ import Colors from "../../constant/Colors";
 import { Button } from "../../components";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
+import Toast from "react-native-toast-message";
 
 const ChapterView = () => {
   const router = useRouter();
@@ -26,15 +27,31 @@ const ChapterView = () => {
 
   const onChapterComplete = async () => {
     try {
-      console.log(`chapterIndex`, chapterIndex);
       setIsLoading(true);
       await updateDoc(doc(db, "courses", docId), {
         completedChapter: arrayUnion(chapterIndex),
       });
-
+      Toast.show({
+        type: "success",
+        position: "top",
+        text2: "The chapter was completed.",
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
       router.replace("/courseView/" + docId);
     } catch (error) {
       console.log("error in onChapterComplete: ", error);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text2: error?.message,
+        //  text2: "",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 50,
+      });
     } finally {
       setIsLoading(false);
     }

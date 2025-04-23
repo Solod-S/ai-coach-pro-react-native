@@ -22,6 +22,7 @@ export default function Home() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [courseList, setCourseList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const getCourseList = async () => {
     try {
       setIsLoading(true);
