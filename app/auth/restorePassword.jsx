@@ -64,7 +64,7 @@ const RestorePassword = () => {
         topOffset: 50,
       });
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -94,6 +94,7 @@ const RestorePassword = () => {
             Password Restore
           </Text>
           <TextInput
+            editable={!isLoading}
             style={styles.textInput}
             placeholder="Email"
             placeholderTextColor={Colors.GRAY}

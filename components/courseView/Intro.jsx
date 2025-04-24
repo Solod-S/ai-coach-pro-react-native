@@ -208,6 +208,17 @@ export const Intro = ({ course, enroll }) => {
             text="Enroll Now"
           />
         )}
+        {enroll == "true" && course?.isEnrolled && (
+          <Button
+            style={{
+              backgroundColor: Colors.BG_GRAY,
+              borderColor: Colors.BG_GRAY,
+            }}
+            textStyle={{ color: "black", opacity: 0.4 }}
+            loading={isLoading}
+            text="Enrolled"
+          />
+        )}
         {course?.uid === userDetail?.uid && (
           <Button
             loading={isLoading}

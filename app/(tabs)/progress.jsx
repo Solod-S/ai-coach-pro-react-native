@@ -92,7 +92,10 @@ export default function Progress() {
               onPress={() => {
                 router.push({
                   pathname: "/courseView/" + item?.docId,
-                  params: { courseParams: JSON.stringify(item) },
+                  params: {
+                    courseParams: JSON.stringify(item),
+                    enrollMode: false,
+                  },
                 });
               }}
               key={index}

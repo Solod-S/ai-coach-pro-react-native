@@ -19,7 +19,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      if (user) {
+      if (user && user?.emailVerified) {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {

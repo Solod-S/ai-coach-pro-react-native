@@ -20,6 +20,7 @@ export const CourseList = ({
   courseList,
   enroll = false,
   heading = "Courses",
+  enrollMode = false,
 }) => {
   const router = useRouter();
   return (
@@ -36,7 +37,11 @@ export const CourseList = ({
             onPress={() =>
               router.push({
                 pathname: "/courseView/" + item?.docId,
-                params: { enroll, courseParams: JSON.stringify(item) },
+                params: {
+                  enroll,
+                  courseParams: JSON.stringify(item),
+                  enrollMode,
+                },
               })
             }
             style={styles.courseContainer}

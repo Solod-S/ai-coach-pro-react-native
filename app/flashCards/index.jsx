@@ -70,7 +70,7 @@ export default function Flashcards() {
       Toast.show({
         type: "error",
         position: "top",
-        text2: error?.message,
+        text2: error?.message || error,
         //  text2: "",
         visibilityTime: 2000,
         autoHide: true,

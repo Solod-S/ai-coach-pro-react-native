@@ -37,7 +37,11 @@ export default function Explore() {
               backgroundColor: Colors.LIGHT_GRAY,
             }}
           >
-            <ListByCategory uid={userDetail?.uid} category={item} />
+            <ListByCategory
+              uid={userDetail?.uid}
+              category={item}
+              enrollMode={true}
+            />
           </View>
         ))}
       </ScrollView>

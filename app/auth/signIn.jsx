@@ -19,7 +19,7 @@ import { useRouter } from "expo-router";
 import { auth } from "./../../config/firebaseConfig";
 import { Loading, BackButton, CustomKeyboardView } from "../../components";
 import { UserDetailContext } from "../../context/UserDetailContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Ionicons } from "@expo/vector-icons";
 
 const SignIn = () => {
@@ -37,10 +37,20 @@ const SignIn = () => {
         return;
       }
       setIsLoading(true);
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password?.trim()
+      );
       const { user } = response;
+      if (user.emailVerified === false) {
+        Alert.alert("Failed", "Email not verified.");
+        await signOut(auth);
+        return;
+      }
       setUserDetail(user);
     } catch (e) {
+      await signOut(auth);
       let msg = e.message || "An error occurred";
       if (msg.includes("invalid-email")) msg = "Invalid email";
       if (msg.includes("auth/invalid-credential"))
@@ -87,6 +97,7 @@ const SignIn = () => {
             Welcome Back
           </Text>
           <TextInput
+            editable={!isLoading}
             style={styles.textInput}
             placeholder="Email"
             placeholderTextColor={Colors.GRAY}
@@ -99,6 +110,7 @@ const SignIn = () => {
             }}
           >
             <TextInput
+              editable={!isLoading}
               style={{ ...styles.textInput, paddingRight: 40 }}
               placeholder="Password"
               placeholderTextColor={Colors.GRAY}

@@ -27,7 +27,7 @@ import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { CourseList } from "../home";
 
-export const ListByCategory = ({ category, uid }) => {
+export const ListByCategory = ({ category, uid, enrollMode = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [courseList, setCourseList] = useState([]);
 
@@ -93,7 +93,12 @@ export const ListByCategory = ({ category, uid }) => {
   return (
     <View>
       {courseList?.length > 0 && (
-        <CourseList enroll={true} courseList={courseList} heading={category} />
+        <CourseList
+          enroll={true}
+          courseList={courseList}
+          heading={category}
+          enrollMode={enrollMode}
+        />
       )}
     </View>
   );

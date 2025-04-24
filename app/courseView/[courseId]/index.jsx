@@ -13,7 +13,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useFocusEffect } from "@react-navigation/native";
 
 const courseView = () => {
-  const { courseParams, courseId, enroll } = useLocalSearchParams();
+  const { courseParams, courseId, enroll, enrollMode } = useLocalSearchParams();
   const [course, setCourse] = useState([]);
   // const course = JSON.parse(courseParams);
 
@@ -57,7 +57,7 @@ const courseView = () => {
         style={{ paddingBottom: 20 }}
       >
         <Intro course={course} enroll={enroll} />
-        <Chapters course={course} />
+        {enrollMode === "false" && <Chapters course={course} />}
       </ScrollView>
     </View>
   );

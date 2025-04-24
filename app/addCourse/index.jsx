@@ -33,8 +33,10 @@ import { UserDetailContext } from "../../context/UserDetailContext";
 import { useRouter } from "expo-router";
 import { isSameDay } from "../../utils/isSameDay";
 import Toast from "react-native-toast-message";
+import { UsePreventBack } from "../../hooks";
 
 const AddCourse = () => {
+  UsePreventBack();
   const { userDetail } = useContext(UserDetailContext);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -100,7 +102,7 @@ const AddCourse = () => {
       Toast.show({
         type: "error",
         position: "top",
-        text2: error?.message,
+        text2: error?.message || error,
         //  text2: "",
         visibilityTime: 2000,
         autoHide: true,
@@ -114,6 +116,7 @@ const AddCourse = () => {
   };
 
   const onTopicSelect = topic => {
+    if (isLoading) return;
     const isAlreadyExist = selectedTopic.find(item => item === topic);
     if (!isAlreadyExist) {
       setSelectedTopic(prev => [...prev, topic]);
@@ -169,7 +172,7 @@ const AddCourse = () => {
       Toast.show({
         type: "error",
         position: "top",
-        text2: error?.message,
+        text2: error?.message || error,
         //  text2: "",
         visibilityTime: 2000,
         autoHide: true,
@@ -212,11 +215,14 @@ const AddCourse = () => {
             Digital Marketing Basics)
           </Text>
           <TextInput
+            editable={!isLoading}
             style={styles.textInput}
             numberOfLines={3}
             multiline={true}
             placeholderTextColor={Colors.GRAY}
-            onChangeText={text => setUserInput(text)}
+            onChangeText={text => {
+              setUserInput(text);
+            }}
             // value={userInput}
             placeholder="E.g. Mastering Python, High School Chemistry..."
           />

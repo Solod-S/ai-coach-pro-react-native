@@ -16,7 +16,12 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import { auth, db } from "./../../config/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { Loading, BackButton, CustomKeyboardView } from "../../components";
@@ -28,7 +33,6 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setUserDetail } = useContext(UserDetailContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const createAccount = async () => {
@@ -45,9 +49,11 @@ const SignIn = () => {
       const response = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password?.trim()
       );
       const { user } = response;
+
+      await sendEmailVerification(user);
 
       await updateProfile(user, {
         displayName: fullName,
@@ -61,7 +67,8 @@ const SignIn = () => {
         uid: user.uid,
       };
       await setDoc(doc(db, "users", user.uid), data);
-      setUserDetail(data);
+      await signOut(auth);
+      router.replace("emailVerify");
     } catch (e) {
       let msg = e.message || "An error occurred";
       if (msg.includes("invalid-email")) msg = "Invalid email";
@@ -110,12 +117,14 @@ const SignIn = () => {
             Create New Account
           </Text>
           <TextInput
+            editable={!isLoading}
             style={styles.textInput}
             placeholder="Full Name"
             placeholderTextColor={Colors.GRAY}
             onChangeText={value => setFullName(value)}
           />
           <TextInput
+            editable={!isLoading}
             style={styles.textInput}
             placeholder="Email"
             placeholderTextColor={Colors.GRAY}
@@ -135,6 +144,7 @@ const SignIn = () => {
             }}
           >
             <TextInput
+              editable={!isLoading}
               style={{ ...styles.textInput, paddingRight: 40 }}
               placeholder="Password"
               placeholderTextColor={Colors.GRAY}
