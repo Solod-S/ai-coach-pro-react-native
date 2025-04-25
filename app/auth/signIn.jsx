@@ -39,7 +39,7 @@ const SignIn = () => {
       setIsLoading(true);
       const response = await signInWithEmailAndPassword(
         auth,
-        email,
+        email?.trim(),
         password?.trim()
       );
       const { user } = response;

@@ -33,7 +33,7 @@ const RestorePassword = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRestore = async () => {
-    if (!email.trim()) {
+    if (!email?.trim()) {
       Alert.alert("Error", "Please fill all the fields");
       return;
     }

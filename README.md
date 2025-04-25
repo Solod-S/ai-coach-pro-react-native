@@ -1,50 +1,124 @@
-# Welcome to your Expo app 👋
+![Version](https://img.shields.io/badge/Version-1.0-blue.svg?cacheSeconds=2592000)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![runs with React Native](https://img.shields.io/badge/Runs%20with%20RN-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://reactnative.dev/)
+[![runs with Expo](https://img.shields.io/badge/Runs%20with%20Expo-000.svg?style=flat-square&logo=expo&labelColor=f3f3f3&logoColor=000020)](https://expo.dev/)
+[![runs with React Native Vector Icons](https://img.shields.io/badge/Runs%20with%20RN%20Vector%20Icons-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/oblador/react-native-vector-icons)
+[![Runs with Firebase](https://img.shields.io/badge/Runs%20with%20Firebase-000.svg?style=flat-square&logo=firebase&labelColor=f3f3f3&logoColor=FFCA28)](https://firebase.google.com/)
+[![Runs with React Native Toast Message](https://img.shields.io/badge/Runs%20with%20RN%20Toast%20Message-000.svg?style=flat-square&logo=imessage&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/calintamas/react-native-toast-message)
+[![Runs with Moment](https://img.shields.io/badge/Runs%20with%20MomentJS-000.svg?style=flat-square&logo=monster&labelColor=f3f3f3&logoColor=61B2A7)](https://momentjs.com/)
+[![Runs with Google Gemini](https://img.shields.io/badge/Runs%20with%20Gemini-000.svg?style=flat-square&logo=google&labelColor=f3f3f3&logoColor=4285F4)](https://github.com/google/generative-ai-js)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# AI Coach Pro
 
-## Get started
+![AI Coach Pro](/assets/banner-min.jpg)
 
-1. Install dependencies
+**Project Description:**
+
+AI Coach Pro – a smart app for creating and learning educational materials with the help of AI. 🎓🤖
+
+Key Features:
+
+- Content Generation – instantly create quizzes, flashcards, and Q&A materials powered by AI.
+- Community Library – explore learning materials from other users and share your own.
+- Progress Tracking – monitor your achievements and level up your skills.
+- Personalized Learning – enjoy a tailored learning experience that fits your goals and style.
+
+AI Coach Pro – your personal coach on the journey to knowledge! 💡📚
+
+<div align="center">
+ <br />
+ 
+![AI Coach Pro](/assets/IMG_1205-1.gif)
+
+  <br />
+</div>
+
+**Main Technologies:**
+
+– React Native: A popular framework for building cross-platform mobile applications using JavaScript and React. It enables developers to write native apps for iOS and Android with a single codebase, ensuring seamless performance and a consistent user experience.
+
+– Expo: A powerful framework and platform for developing React Native applications. It offers a managed workflow, over-the-air updates, and access to native APIs without requiring native code, simplifying the development process.
+
+– React Native Vector Icons: A library providing a vast collection of customizable vector icons for React Native applications. It supports multiple icon sets, enabling developers to easily enhance UI elements with scalable icons.
+
+– Firebase: A comprehensive platform by Google that provides backend services such as authentication, real-time databases, cloud storage, and push notifications, enabling seamless app development and scalability.
+
+– React Native Toast Message: A simple and customizable toast notification library for React Native, making it easy to display quick messages, alerts, and confirmations in mobile applications.
+
+– MomentJS a lightweight and powerful JavaScript library for parsing, validating, manipulating, and formatting dates and times. Perfect for handling complex date operations in web and mobile applications with ease and consistency.
+
+– Google Gemini (@google/generative-ai): A generative AI model from Google that enables advanced AI-powered features such as text generation, image analysis, and conversational AI, enhancing the capabilities of applications with state-of-the-art machine learning.
+
+## How to Install and Run Your React Native App Using Expo
+
+![React Native App](/assets/exp.png)
+
+### Prerequisites
+
+1. **Install Node.js**: Ensure you have Node.js installed. You can download it from [Node.js official website](https://nodejs.org/).
+2. **Install Expo CLI**: Install Expo globally by running:
 
    ```bash
-   npm install
+   npm install -g expo-cli
    ```
 
-2. Start the app
+3. Install a Mobile Emulator or Expo Go App:
 
-   ```bash
-    npx expo start
-   ```
+   Use a simulator/emulator for iOS or Android.
+   Or install the Expo Go app on your mobile device from the App Store or Google Play.
 
-In the output, you'll find options to open the app in a
+### Using Git (recommended)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Clone the project from github. Change "myproject" to your project name.
 
 ```bash
-npm run reset-project
+git clone https://github.com/Solod-S/ai-coach-pro-react-native ./myproject
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Using manual download ZIP
 
-## Learn more
+1.  Download repository
+2.  Uncompress to your desired directory
 
-To learn more about developing your project with Expo, look at the following resources:
+### Install npm dependencies after installing (Git or manual download)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+cd myproject
+npm install
+```
 
-## Join the community
+### Start
 
-Join our community of developers creating universal apps.
+0. Prepare .env file
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```javascript
+EXPO_PUBLIC_FIREBASE_API_KEY;
+EXPO_PUBLIC_FIREBASE_APP_ID;
+EXPO_PUBLIC_GEMINI_API_KEY;
+```
+
+1. Start the Project
+
+```javascript
+npm start
+```
+
+2. Open the App on Your Device
+
+- Using Expo Go App:
+
+  - Scan the QR code with the Expo Go app.
+  - The app will load directly on your device.
+
+- Using an Emulator:
+
+  - iOS Simulator "i"
+  - Android Simulator "a"
+
+3. Enjoy Your App!!!
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or improvements, please create a pull request. For major changes, please open an issue first to discuss the changes.
+
+**_NOTE: PLEASE LET ME KNOW IF YOU DISCOVERED ANY BUG OR YOU HAVE ANY SUGGESTIONS_**

@@ -49,10 +49,10 @@ export const Intro = ({ course, enroll }) => {
         courses.push(doc.data());
       });
 
-      if (userDetail?.member == false && courses?.length >= 5) {
-        Alert.alert("Limit Reached", "You can add up to 5 courses only.");
-        return;
-      }
+      // if (userDetail?.member == false && courses?.length >= 5) {
+      //   Alert.alert("Limit Reached", "You can add up to 5 courses only.");
+      //   return;
+      // }
 
       const docId = Date.now().toString();
       const data = {
